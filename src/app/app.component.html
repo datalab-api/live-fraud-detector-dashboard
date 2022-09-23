@@ -2,15 +2,8 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container-fluid">
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarExample01"
-        aria-controls="navbarExample01"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
+        aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
       </button>
       <div class="collapse navbar-collapse" id="navbarExample01">
@@ -38,9 +31,35 @@
   <form [formGroup]="onSubmitForm" (ngSubmit)="onSubmit()">
     <div class="p-7 text-center bg-light">
 
-      <img src="../assets/home2.png" class="img-thumbnail" alt="..." >
+      <img src="../assets/home2.png" class="img-thumbnail" alt="...">
       <div class="my-4"></div>
-      <button mdbBtn color="info" block="true" type="submit">Valider</button>
+      <button type="submit" mdbBtn color="primary" class="waves-light" data-toggle="modal" data-target="#basicExample"
+        (click)="frame.show()" mdbWavesEffect>Valider</button>
+      <div mdbModal #frame="mdbModal" class="modal fade top" id="frameModalTop" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+          <!--Content-->
+          <div class="modal-content text-center">
+            <!--Header-->
+            <div class="modal-header d-flex justify-content-center">
+              <p class="heading">Are you sure to download data generated ?</p>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+              <mdb-icon fas icon="times" size="4x" class="animated rotateIn"></mdb-icon>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+              <a href="https://mdbootstrap.com/docs/angular/pro/" mdbBtn color="danger" outline="true"
+                class="waves-effect" [href]="fileUrl" download="data.json" mdbWavesEffect>Yes</a>
+              <a type="button" mdbBtn color="danger" class="waves-effect" mdbWavesEffect data-dismiss="modal"
+                (click)="frame.hide()">No</a>
+            </div>
+          </div>
+          <!--/.Content-->
+        </div>
+      </div>
+
       <router-outlet></router-outlet>
 
     </div>
@@ -49,5 +68,3 @@
 
   <!-- Jumbotron -->
 </header>
-
-

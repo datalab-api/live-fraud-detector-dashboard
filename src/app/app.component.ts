@@ -65,7 +65,7 @@ export class AppComponent {
 
   public downloadJson() {
 
-    let blob: any = new Blob([JSON.stringify(this.getData(), null, 4)], { type: 'text/json; charset=utf-8' });
+    let blob: any = new Blob([JSON.stringify(this.getData(), null, 2)], { type: 'text/json; charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     fileSaver.saveAs(blob, 'data.json');
     this.router.navigate(['**', { relativeTo: this.route }]);

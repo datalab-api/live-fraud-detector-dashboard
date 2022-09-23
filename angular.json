@@ -42,7 +42,10 @@
               "node_modules/chart.js/dist/Chart.js",
               "node_modules/hammerjs/hammer.min.js"
             ],
-            "allowedCommonJsDependencies": ["rxjs-compat"]
+            "allowedCommonJsDependencies": [
+              "file-save",
+              "lodash"
+            ]
           },
           "configurations": {
             "production": {

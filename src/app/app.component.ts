@@ -4,9 +4,10 @@ import * as fileSaver from 'file-saver';
 
 import { FormBuilder } from '@angular/forms';
 import { BackendService } from './@core/backend.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 var type = ["fraud", "fraud2", "non-fraud"];
-
+const TOKEN_DATA = 'data-fraud';
 
 @Component({
   selector: 'app-root',
@@ -18,13 +19,30 @@ export class AppComponent {
 
   name = 'data';
   fileUrl: any;
+  data: any;
+  constructor(
+    private backendService: BackendService,
+    private formBuilder: FormBuilder,
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
-  constructor(private backendService: BackendService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer) { }
   onSubmitForm = this.formBuilder.group({
     type: ''
   });
+
   ngOnInit(): void {
 
+  }
+
+  private saveData(data: string): void {
+    window.sessionStorage.removeItem(TOKEN_DATA);
+    window.sessionStorage.setItem(TOKEN_DATA, data);
+  }
+
+  private getData(): string | null {
+    return window.sessionStorage.getItem(TOKEN_DATA);
   }
 
   onSubmit() {
@@ -32,14 +50,12 @@ export class AppComponent {
     this.onSubmitForm.value.type = type[Math.floor(Math.random() * type.length)];
     this.backendService.onSubmitService(this.onSubmitForm.value.type).subscribe
       (
-        (result: any) => {
-          console.info('Your order has been submitted is succefully :', result);
-          if (result.code === 210) {
-            console.info(result);
-            let blob: any = new Blob([JSON.stringify(result, null, 2)], { type: 'text/json; charset=utf-8' });
-            const url = window.URL.createObjectURL(blob);
-            fileSaver.saveAs(blob,'data.json');
-          }
+        (result) => {
+          console.info('Your order has been submitted is succefully :', result.data);
+          const res = result.data;
+          this.saveData(JSON.stringify(res, null, 2));
+          console.info(this.getData());
+
         },
         (err) => {
           console.warn('Error your order has been submitted', err);
@@ -47,8 +63,12 @@ export class AppComponent {
       )
   }
 
-  downloadJson (){
+  public downloadJson() {
 
+    let blob: any = new Blob([JSON.stringify(this.getData(), null, 4)], { type: 'text/json; charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    fileSaver.saveAs(blob, 'data.json');
+    this.router.navigate(['**', { relativeTo: this.route }]);
   }
 
 }
